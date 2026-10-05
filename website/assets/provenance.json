@@ -1,0 +1,178 @@
+{
+  "paper_title": "Posterior Flow Matching",
+  "source_repository": "https://github.com/merry7cherry/-ICLR-2027-Posterior-Flow-Matching",
+  "source_revision": "6a74be50bff5bcc71564d194d83369fec84de7eb",
+  "verified_on": "2026-10-05",
+  "publication_status": "Preprint; no conference acceptance claimed.",
+  "assets": [
+    {
+      "asset": "method.webp",
+      "source": "figure/image/method_overview.pdf",
+      "source_sha256": "e99d9798ad2aeb40562075e97cceb3579934eb57420c72c00f2db4aaaa21b720",
+      "transform": {
+        "render_width_px": 2200,
+        "format": "webp",
+        "quality": 90,
+        "crop_fraction_xyxy": [
+          0,
+          0,
+          1,
+          0.437
+        ]
+      },
+      "width": 2200,
+      "height": 722,
+      "bytes": 101000
+    },
+    {
+      "asset": "teaser.webp",
+      "source": "figure/image/method_overview.pdf",
+      "source_sha256": "e99d9798ad2aeb40562075e97cceb3579934eb57420c72c00f2db4aaaa21b720",
+      "transform": {
+        "render_width_px": 2200,
+        "format": "webp",
+        "quality": 90,
+        "crop_fraction_xyxy": [
+          0,
+          0.437,
+          1,
+          1
+        ]
+      },
+      "width": 2200,
+      "height": 931,
+      "bytes": 185284
+    },
+    {
+      "asset": "imagenet_generation.webp",
+      "source": "figure/image/imagenet_generation.pdf",
+      "source_sha256": "08608eeaf708801b589afcbd1c650dcd858735bd930ab781615406dec0636411",
+      "transform": {
+        "render_width_px": 2200,
+        "format": "webp",
+        "quality": 90,
+        "crop_fraction_xyxy": null
+      },
+      "width": 2200,
+      "height": 561,
+      "bytes": 223226
+    },
+    {
+      "asset": "pointcloud_generation.webp",
+      "source": "figure/image/pointcloud_generation.pdf",
+      "source_sha256": "a1c3f9d4a66093a75ea9797c9d7ef3f990b730e331d6a9d52d8022da931041f8",
+      "transform": {
+        "render_width_px": 2200,
+        "format": "webp",
+        "quality": 90,
+        "crop_fraction_xyxy": null
+      },
+      "width": 2200,
+      "height": 1149,
+      "bytes": 319916
+    },
+    {
+      "asset": "molecule_generation.webp",
+      "source": "figure/image/molecule_generation.pdf",
+      "source_sha256": "0cc768dc6484e79061ae3a2d026a1fc0d2e1fbead2a4f5db66f3bf58f238653c",
+      "transform": {
+        "render_width_px": 2200,
+        "format": "webp",
+        "quality": 90,
+        "crop_fraction_xyxy": null
+      },
+      "width": 2200,
+      "height": 1188,
+      "bytes": 137426
+    },
+    {
+      "asset": "pusht_generation.webp",
+      "source": "figure/image/pusht_generation.pdf",
+      "source_sha256": "55636676a81be6f0a7224fa111bf263b033428af690cd3959849e5ce77e3e443",
+      "transform": {
+        "render_width_px": 2200,
+        "format": "webp",
+        "quality": 90,
+        "crop_fraction_xyxy": null
+      },
+      "width": 2200,
+      "height": 964,
+      "bytes": 83104
+    },
+    {
+      "asset": "posterior_diagnostics.webp",
+      "source": "figure/image/posterior_diagnostics.pdf",
+      "source_sha256": "263cb1f0b22f3382351d8bb16b910ecabf5f0d47793aa0efb220fe2b77e50602",
+      "transform": {
+        "render_width_px": 2200,
+        "format": "webp",
+        "quality": 90,
+        "crop_fraction_xyxy": null
+      },
+      "width": 2200,
+      "height": 605,
+      "bytes": 83334
+    },
+    {
+      "asset": "stochasticity_ablation.webp",
+      "source": "figure/image/stochasticity_ablation.pdf",
+      "source_sha256": "8b686333fc5303da2a206821c2bb824762111e684aa5ba128e861dd8e80078d3",
+      "transform": {
+        "render_width_px": 2200,
+        "format": "webp",
+        "quality": 90,
+        "crop_fraction_xyxy": null
+      },
+      "width": 2200,
+      "height": 646,
+      "bytes": 66486
+    }
+  ],
+  "text_sources": {
+    "authors_and_abstract": "iclr2027_conference.tex",
+    "results": [
+      "table/cifar10_table.tex",
+      "table/imagenet_table.tex",
+      "table/pointcloud_table.tex",
+      "table/molecule_table.tex",
+      "table/pusht_table.tex",
+      "table/sampling_time.tex",
+      "table/posterior_covariance_ablation.tex"
+    ],
+    "captions": "figure/*.tex",
+    "method": "iclr2027_conference.tex: posterior model, PFM NLL, endpoint readouts, ODE/SDE, and theoretical conditions"
+  },
+  "notes": [
+    "Figure contents are rendered from the paper without changing data, colors, labels, or scientific comparisons.",
+    "The teaser and method images are complementary crops of the paper overview.",
+    "Qualitative example selection is inherited from the paper; samples are not presented as a random benchmark sample."
+  ],
+  "paper_download": {
+    "asset": "paper.pdf",
+    "source": "iclr2027_conference.tex and tracked compilation dependencies",
+    "source_revision": "6a74be50bff5bcc71564d194d83369fec84de7eb",
+    "compiler": "pdfTeX 1.40.28 / TeX Live 2025; latexmk 4.87",
+    "build_mode": "Preprint; unchanged tracked source compiled in a temporary directory",
+    "pages": 42,
+    "sha256": "27d1279928a3f16f48fa1fd6b6595d778d8bbad02debeb432ebde2baf9786a5e",
+    "bytes": 28647359,
+    "verification": "Compilation succeeded; no undefined references or LaTeX errors. Representative author, results, figure, and timing pages visually checked."
+  },
+  "text_source_sha256": {
+    "iclr2027_conference.tex": "47eff14d16d984dc0be1e929b7f2e1e69e6fb1f8c4eb98f1f34a503e82ff9112",
+    "table/imagenet_table.tex": "6ceff9022c0a9211b7870c4e68702c8ccee215cc5cc8cb502d456c7037216e9b",
+    "table/cifar10_table.tex": "a4a3992ce1dde000f17a7b71cc0794ab0451e79223f10ef24d3effd44d38738a",
+    "table/pointcloud_table.tex": "7ed4e4b10f7e51cacc45094e425bb0847b6216697a52b2e10c1290183d808722",
+    "table/molecule_table.tex": "3f9847cfeef3ccb04ebe050bbd0d400df45b24ea75914ac2d3a8d6f40c6f4b23",
+    "table/pusht_table.tex": "8bbecf5192047f0e26b5f3ff05330060c3bc6e54636ad1c93dbcc7e5877dac22",
+    "table/posterior_covariance_ablation.tex": "cad216ab86695efffe014d089d3c2391aa226fbb54d2d4df4472dd41e681b201",
+    "table/sampling_time.tex": "3fdd4e830fcf28c8752fd4a6c8363e3ffcd2bf320ff13e38a5593b1b7eb1c4c4"
+  },
+  "website_presentation": {
+    "updated_on": "2026-10-05",
+    "notation": "Matches the manuscript: v_theta and Sigma_theta in velocity coordinates, mu_theta and Sigma_theta^x for endpoint readouts.",
+    "tables": "Full main task tables, selected covariance summary plus complete covariance tables, and complete sampling-time table. All values transcribed from the source TeX.",
+    "figures": "Existing eight exports retained without rerendering or data changes.",
+    "release_scope": "Image training, sampling, and evaluation interfaces; no pretrained checkpoints; default configurations are examples."
+  }
+}

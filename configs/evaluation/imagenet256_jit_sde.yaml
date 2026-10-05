@@ -1,0 +1,23 @@
+profile: generated_common
+metric_names:
+- fid
+- inception_score
+generated_population: 50000
+batch_size: 16
+fid_batch_size: 256
+fid_backend: jit_imagenet
+seed: 321
+fid_asset_id: imagenet256-jit-train-pfm-v4
+sampling:
+  solver: sde
+  steps: 250
+  terminal_time: 0.99
+  terminal_readout: endpoint_mean
+  diffusion_scale: 0.1
+  diffusion_schedule: linear_decay
+  derivative_probes: 2
+  precision: bf16
+  compile: true
+  allow_tf32: false
+  cudnn_benchmark: true
+classifier_asset_id: null

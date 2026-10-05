@@ -1,0 +1,6 @@
+dataset: imagenet
+image_size: 256
+split: train
+backend: jit_imagenet
+num_samples: 1281167
+batch_size: 256

@@ -1,0 +1,17 @@
+__pycache__/
+.pytest_cache/
+*.egg-info/
+/.venv/
+/.local-archive/
+.DS_Store
+
+# Local data, experiments and builds are not release assets.
+/data/
+/outputs/
+/assets/
+/checkpoints/
+/.cache/
+/build/
+/dist/
+/eval/
+/mnist-smoke/

@@ -1,0 +1,6 @@
+dataset: cifar10
+image_size: 32
+split: train
+backend: inception
+num_samples: 50000
+batch_size: 256

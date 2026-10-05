@@ -1,0 +1,19 @@
+profile: sample_visualization
+batch_size: 16
+class_start: 0
+class_count: 1000
+num_per_class: 1
+seed: 321
+uncertainty_capture_t: 0.495
+sampling:
+  solver: sde
+  steps: 250
+  terminal_time: 0.99
+  terminal_readout: endpoint_mean
+  diffusion_scale: 0.1
+  diffusion_schedule: linear_decay
+  derivative_probes: 2
+  precision: bf16
+  compile: true
+  allow_tf32: false
+  cudnn_benchmark: true

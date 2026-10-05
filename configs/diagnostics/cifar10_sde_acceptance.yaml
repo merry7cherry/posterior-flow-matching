@@ -1,0 +1,14 @@
+batch_size: 4
+seed: 42
+diffusion_scale: 0.1
+terminal_time: 0.99
+probe_repeats: 2
+reference_times: [0.1, 0.5, 0.9]
+probe_counts: [1, 2, 4, 8]
+precisions: [fp32, bf16]
+compile: true
+allow_tf32: false
+cudnn_benchmark: true
+sampler_steps: [50, 100]
+sampler_probes: [2, 4]
+cutoff_times: [0.99]

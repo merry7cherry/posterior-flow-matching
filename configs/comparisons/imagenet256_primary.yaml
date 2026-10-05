@@ -1,0 +1,15 @@
+comparison_id: imagenet256_primary
+dataset: imagenet
+required_methods: [velocity_fm, endpoint_fm, pfm_full, pfm_delta]
+required_consumers:
+  velocity_fm: [generated_common]
+  endpoint_fm: [generated_common]
+  pfm_full: [generated_common, posterior_diagnostics]
+  pfm_delta: [generated_common, posterior_diagnostics]
+consumer_protocols:
+  generated_common:
+    owner: project
+    path: configs/evaluation/imagenet256_jit_generation.yaml
+  posterior_diagnostics:
+    owner: project
+    path: configs/evaluation/imagenet256_jit_posterior.yaml

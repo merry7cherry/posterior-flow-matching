@@ -1,0 +1,14 @@
+profile: posterior_diagnostics
+metric_names:
+  - posterior_controlled
+  - posterior_calibration
+posterior_population: 50000
+batch_size: 64
+num_bins: 15
+posterior_t_values: [0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90]
+seed: 321
+precision: bf16
+compile: true
+allow_tf32: false
+cudnn_benchmark: true
+num_workers: 12

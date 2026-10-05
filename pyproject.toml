@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pfm"
+version = "0.1.0"
+description = "Posterior Flow Matching: training, sampling, and evaluation for images"
+readme = "README.md"
+license = "MIT AND CC-BY-NC-SA-4.0"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md", "third_party/licenses/*"]
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "torch==2.11.0",
+    "torchvision==0.26.0",
+    "numpy==2.4.6",
+    "Pillow==12.2.0",
+    "PyYAML==6.0.3",
+    "matplotlib==3.11.0",
+    "tqdm==4.68.3",
+]
+
+[project.optional-dependencies]
+dev = ["pytest==9.1.1"]
+eval = [
+    "torch-fidelity @ git+https://github.com/LTH14/torch-fidelity.git@bfe72b995473e4fee9351705d7b005f17442a4ca",
+]
+
+[project.scripts]
+pfm-aggregate = "pfm.cli.aggregate:main"
+pfm-evaluate = "pfm.cli.evaluate:main"
+pfm-prepare-fid = "pfm.cli.prepare_fid:main"
+pfm-prepare-data = "pfm.cli.prepare_data:main"
+pfm-sample = "pfm.cli.sample:main"
+pfm-train = "pfm.cli.train:main"
+pfm-train-classifier = "pfm.cli.train_classifier:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
