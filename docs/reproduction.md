@@ -13,8 +13,9 @@ Training defaults to CUDA; CPU must be selected explicitly with `--device cpu`
 and `--set mixed_precision=none`. Data preparation is a separate command and
 requires explicit download permission through `--download`.
 
-The package implements MNIST, CIFAR-10 and ImageNet-256. Point-cloud, molecular
-and PushT results on the project page belong to separate implementations.
+The package implements MNIST, CIFAR-10 and ImageNet-256. For point-cloud,
+molecular, and PushT instructions, use the [four-task code index](../README.md#code-for-all-four-tasks).
+Each task has its own environment and validation record.
 
 ## Small executable example
 

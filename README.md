@@ -9,6 +9,20 @@ Learn conditional velocity means and variances for generation and endpoint-poste
 The paper link opens the authors' preprint PDF hosted with the project page.
 The arXiv submission is under review; its link will be added when available.
 
+## Code for all four tasks
+
+| Task | Code and setup | Scope |
+| --- | --- | --- |
+| Images | [This repository](#install) | MNIST, CIFAR-10, ImageNet-256 |
+| Point clouds | [PFM Pointcloud](https://github.com/merry7cherry/posterior-flow-matching-pointcloud) | ShapeNet Chair and Airplane; joint latent conditioning |
+| Molecules | [PFM Molecules](https://github.com/merry7cherry/posterior-flow-matching-molecules) | GEOM-QM9; centered molecular conformations |
+| Actions | [PFM PushT](https://github.com/merry7cherry/posterior-flow-matching-pusht) | Image-conditioned PushT simulation |
+
+Each task has its own installation, data preparation, training, ODE/SDE sampling,
+evaluation, and posterior-diagnostic instructions. Install task repositories in
+separate environments; they do not import one another. The three task-specific
+releases retain standard PFM and their native task models and protocols.
+
 ![Posterior Flow Matching](website/assets/method.webp)
 
 PFM learns a Gaussian velocity posterior. Its mean drives ODE sampling; its
@@ -16,12 +30,11 @@ variance supports a corrected Itô SDE and endpoint uncertainty readouts. ODE
 and SDE use the same trained model. Endpoint covariance is `(1-t)^2` times
 velocity covariance; that scaling alone does not establish calibration.
 
-This repository contains the **image implementation** (MNIST, CIFAR-10 and
-ImageNet-256), including velocity/endpoint FM baselines, Full/Delta PFM,
-training, sampling, and posterior diagnostics. Point-cloud, molecular and
-PushT results on the project page belong to separate implementations. Their
-code is not included in this image release. **We do not provide pretrained
-checkpoints.** Train a model with the supplied interfaces, then use its saved
+The source in this repository is the **image implementation** (MNIST, CIFAR-10
+and ImageNet-256), including velocity/endpoint FM baselines, Full/Delta PFM,
+training, sampling, and posterior diagnostics. The table above links the
+independent point-cloud, molecular, and PushT implementations. **We do not
+provide pretrained PFM checkpoints.** Train a model with the supplied interfaces, then use its saved
 checkpoint for sampling and evaluation. Configurations are adjustable starting
 points; their defaults are not exact recipes for the paper's reported results.
 
