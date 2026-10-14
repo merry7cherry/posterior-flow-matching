@@ -8,7 +8,6 @@ import copy
 import random
 import tqdm
 import numpy as np
-import time
 from diffusion_policy.policy.pfm_image_policy import PFMImagePolicy
 from diffusion_policy.dataset.base_dataset import BaseImageDataset
 from diffusion_policy.env_runner.base_image_runner import BaseImageRunner
@@ -159,7 +158,6 @@ class PFMWorkspace:
                 torch.set_rng_state(self.resume_state['torch_rng'].cpu())
                 if device.type == 'cuda':
                     torch.cuda.set_rng_state_all([x.cpu() for x in self.resume_state['cuda_rng']])
-            started = time.monotonic()
             for local_epoch_idx in range(self.epoch, cfg.training.num_epochs):
                 step_log = dict()
                 # ========= train for this epoch ==========
@@ -202,9 +200,6 @@ class PFMWorkspace:
 
                         step_log.update({k: float(v) for k, v in self.model.loss_stats.items()})
                         step_log.update({k: float(v) for k, v in gradient_stats.items()})
-                        step_log['elapsed_seconds'] = time.monotonic() - started
-                        if device.type == 'cuda':
-                            step_log['peak_cuda_allocated_bytes'] = torch.cuda.max_memory_allocated()
 
                         is_last_batch = (batch_idx == (len(train_dataloader)-1))
                         if cfg.training.max_train_steps is not None:

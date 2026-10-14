@@ -10,7 +10,7 @@ from etflow.commons.covmat import CovMatEvaluator, print_covmat_results
 
 def evaluate_metrics(input_path, output_dir, workers=1):
     packed = torch.load(input_path, map_location='cpu', weights_only=False)
-    evaluator = CovMatEvaluator(num_workers=workers, use_force_field=False)
+    evaluator = CovMatEvaluator(num_workers=workers)
     results, _ = evaluator(packed)
     coverage, matching = print_covmat_results(results)
     row = int(np.argmin(abs(results['thresholds'] - 0.5)))

@@ -5,7 +5,7 @@ import math
 import torch
 from torch import nn
 from .encoder import PointNetEncoder
-from .flow import build_latent_flow, add_spectral_norm, SpectralNorm
+from .flow import build_latent_flow
 from .pfm import PointwisePFM, sample
 from .common import gaussian_entropy
 
@@ -32,19 +32,15 @@ class PFMGenerator(nn.Module):
         encoder = {k.removeprefix('encoder.'): v for k, v in state.items() if k.startswith('encoder.')}
         prior = {k.removeprefix('flow.'): v for k, v in state.items() if k.startswith('flow.')}
         model.encoder.load_state_dict(encoder, strict=True)
-        if any(k.endswith('weight_orig') for k in prior):
-            add_spectral_norm(model.prior)
+        # Upstream spectral-normalized assets store W, u and v; import their
+        # effective linear weights once, without retaining runtime hooks.
+        for key in tuple(prior):
+            if key.endswith('weight_orig'):
+                prefix = key.removesuffix('weight_orig')
+                weight = prior.pop(key)
+                u, v = prior.pop(prefix + 'weight_u'), prior.pop(prefix + 'weight_v')
+                prior[prefix + 'weight'] = weight / torch.dot(u, weight @ v)
         model.prior.load_state_dict(prior, strict=True)
-        # Preserve effective upstream weights, including spectral-normalized assets.
-        for module in model.prior.modules():
-            for key, hook in list(module._forward_pre_hooks.items()):
-                if isinstance(hook, SpectralNorm):
-                    hook.compute_weight(module, 0)
-                    weight = module.weight.detach().clone()
-                    del module._forward_pre_hooks[key]
-                    for name in ('weight', 'weight_u', 'weight_v', 'weight_orig'):
-                        delattr(module, name)
-                    module.register_parameter('weight', nn.Parameter(weight))
         return model
 
     @classmethod

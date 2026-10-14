@@ -1,5 +1,4 @@
 from copy import deepcopy
-from functools import partial
 from multiprocessing import get_context
 from typing import Callable, List
 
@@ -11,7 +10,6 @@ from datamol.types import Mol
 from loguru import logger as log
 from rdkit.Chem import rdMolAlign as MA
 from rdkit.Chem.rdchem import Conformer
-from rdkit.Chem.rdForceFieldHelpers import MMFFOptimizeMolecule
 from rdkit.Chem.rdmolops import RemoveHs
 from rdkit.Geometry import Point3D
 from tqdm import tqdm
@@ -29,19 +27,6 @@ def build_conformer(pos):
     return conformer
 
 
-def set_multiple_rdmol_positions(rdkit_mol, pos):
-    """
-    Args:
-        rdkit_mol:  An `rdkit.Chem.rdchem.Mol` object.
-        pos: (n, N_atoms, 3)
-    """
-    mol = deepcopy(rdkit_mol)
-    for conf_pos in pos:
-        conformer = build_conformer(conf_pos)
-        mol.AddConformer(conformer, assignId=True)
-    return mol
-
-
 def set_rdmol_positions(rdkit_mol, pos):
     """
     Args:
@@ -54,30 +39,24 @@ def set_rdmol_positions(rdkit_mol, pos):
     return mol
 
 
-def get_best_rmsd(probe, ref, use_alignmol=False):
+def get_best_rmsd(probe, ref):
     probe = RemoveHs(probe)
     ref = RemoveHs(ref)
 
     try:
-        if use_alignmol:
-            return MA.AlignMol(probe, ref)
-        else:
-            rmsd = MA.GetBestRMS(probe, ref)
+        rmsd = MA.GetBestRMS(probe, ref)
     except:  # noqa
         rmsd = np.nan
 
     return rmsd
 
 
-def get_rmsd(ref_mol: Mol, gen_mols: List[Mol], useFF=False, use_alignmol=False):
+def get_rmsd(ref_mol: Mol, gen_mols: List[Mol]):
     num_gen = len(gen_mols)
     rmsd_vals = []
     for i in range(num_gen):
         gen_mol = gen_mols[i]
-        if useFF:
-            # print('Applying FF on generated molecules...')
-            MMFFOptimizeMolecule(gen_mol)
-        rmsd_vals.append(get_best_rmsd(gen_mol, ref_mol, use_alignmol=use_alignmol))
+        rmsd_vals.append(get_best_rmsd(gen_mol, ref_mol))
 
     return rmsd_vals
 
@@ -96,9 +75,9 @@ def calc_performance_stats(rmsd_array, threshold):
     return coverage_recall, amr_recall, coverage_precision, amr_precision
 
 
-def worker_fn(job, useFF=False, use_alignmol=False):
+def worker_fn(job):
     smi, i_true, ref_mol, gen_mols = job
-    rmsd_vals = get_rmsd(ref_mol, gen_mols, useFF=useFF, use_alignmol=use_alignmol)
+    rmsd_vals = get_rmsd(ref_mol, gen_mols)
     return smi, i_true, rmsd_vals
 
 
@@ -108,8 +87,6 @@ class CovMatEvaluator(object):
     def __init__(
         self,
         num_workers: int = 8,
-        use_force_field: bool = False,
-        use_alignmol: bool = False,
         thresholds: np.ndarray = np.arange(0.05, 3.05, 0.05),
         ratio: int = 2,
         filter_disconnected: bool = True,
@@ -117,8 +94,6 @@ class CovMatEvaluator(object):
     ):
         super().__init__()
         self.num_workers = num_workers
-        self.use_force_field = use_force_field
-        self.use_alignmol = use_alignmol
         self.thresholds = np.array(thresholds).flatten()
 
         self.ratio = ratio
@@ -184,10 +159,7 @@ class CovMatEvaluator(object):
         else:
             map_fn = map
 
-        fn = partial(
-            worker_fn, useFF=self.use_force_field, use_alignmol=self.use_alignmol
-        )
-        for res in tqdm(map_fn(fn, jobs), total=len(jobs)):
+        for res in tqdm(map_fn(worker_fn, jobs), total=len(jobs)):
             populate_results(res)
 
         if self.num_workers > 1:

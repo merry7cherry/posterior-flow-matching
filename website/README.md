@@ -78,3 +78,14 @@ links directly to its task directory. Only `website/` is uploaded by Pages.
 The October 13, 2026 consolidation retains the existing paper PDF, figures and
 scientific result tables. CPU workflow evidence lives with the corresponding
 implementation; the page's numerical results remain the paper's experiments.
+
+The molecular panel distinguishes native graph-conditioned generation from the
+optional input-stereo reflection step. The inherited atom chirality input remains
+constant; this release preserves its feature and checkpoint semantics. Posterior
+readouts describe the uncorrected model, and molecular diagnostics report residual
+second moments and Gaussian NLL. Keep this description aligned with the root and
+molecular READMEs when changing the released implementation.
+
+The 2026-10-14 UTC cleanup preview verified the molecular tab and its updated
+explanation in the in-app browser. Local asset/anchor checks passed, all four task
+links remained correct, and the 13 scientific tables and paper assets were unchanged.

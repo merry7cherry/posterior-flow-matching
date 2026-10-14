@@ -1,7 +1,9 @@
 
 import numpy as np
+import torch
 
 from etflow.cli import diagnostics as d
+from etflow.models import pfm_probability as prob
 
 
 def test_projected_gaussian_calibration_and_affine_consistency():
@@ -36,3 +38,31 @@ def test_variance_underestimation_detected():
     residual=np.ones((1,4,3))
     a=d.atom_statistics(residual,np.full((1,4),.25),.01)
     np.testing.assert_allclose(a['ratio'],4)
+
+
+def test_summary_detects_centered_residual_errors():
+    # Centering makes the pooled first moment zero even with a poor prediction.
+    residual = torch.tensor([[2., 0., 0.], [-2., 0., 0.],
+                             [0., 1., 0.], [0., -1., 0.]])
+    batch = torch.zeros(4, dtype=torch.long)
+    logvar = torch.zeros(4)
+    marginal = prob.marginal_variance(logvar.exp(), batch).numpy()[None]
+    config = dict(times=[.5], bins=1, bootstrap_repeats=32, seed=42)
+    design = dict(inner_bin_edges=[[]], time_only_preprojection_variance=[1.])
+
+    def summary(scale):
+        error = scale * residual
+        torch.testing.assert_close(error.mean(0), torch.zeros(3))
+        record = {k: value[None] for k, value in
+                  d.atom_statistics(error.numpy()[None], marginal, .5).items()}
+        record.update(num_atoms=4, nll=prob.projected_nll(error, logvar, batch).numpy()[None],
+                      bound_fraction=np.zeros((1, 1, 4)))
+        return d.summarize([record], design, config)['timepoints'][0]
+
+    original, worse = summary(1), summary(2)
+    assert original['error_x']['mean'] > 0
+    assert worse['error_x']['mean'] == 4 * original['error_x']['mean']
+    assert worse['ratio']['mean'] == 4 * original['ratio']['mean']
+    assert worse['trace_x'] == original['trace_x']
+    assert worse['nll']['mean'] > original['nll']['mean']
+    assert worse['baseline_nll']['mean'] > original['baseline_nll']['mean']

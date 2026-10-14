@@ -53,6 +53,38 @@ def test_variance_bounds_joint_gradients_and_prior_roundtrip():
     torch.testing.assert_close(model.prior(model.prior_sample(w)), w, atol=2e-6,rtol=2e-6)
 
 
+def test_official_spectral_weights_are_materialized_once(tmp_path):
+    model = PFMGenerator(model_args())
+    prior = {key: value.clone() for key, value in model.prior.state_dict().items()}
+    with torch.no_grad():
+        for name, module in model.prior.named_modules():
+            if isinstance(module, torch.nn.Linear):
+                weight = module.weight.clone()
+                u, singular, vh = torch.linalg.svd(weight, full_matrices=False)
+                prior[name + '.weight_orig'] = weight
+                prior[name + '.weight_u'] = u[:, 0]
+                prior[name + '.weight_v'] = vh[0]
+                prior[name + '.weight'].zero_()  # A stale cached weight is not authoritative.
+                module.weight.copy_(weight / singular[0])
+    path = tmp_path / 'spectral.pt'
+    torch.save({'args': vars(model_args()), 'state_dict': {
+        **{'encoder.' + key: value for key, value in model.encoder.state_dict().items()},
+        **{'flow.' + key: value for key, value in prior.items()},
+    }}, path)
+    loaded = PFMGenerator.from_official(path)
+    x = torch.randn(2, 8, requires_grad=True)
+    expected, expected_logp = model.prior(x, x.new_zeros((2, 1)))
+    actual, actual_logp = loaded.prior(x, x.new_zeros((2, 1)))
+    torch.testing.assert_close(actual, expected)
+    torch.testing.assert_close(actual_logp, expected_logp)
+    torch.testing.assert_close(loaded.prior(actual, reverse=True), x)
+    torch.testing.assert_close(torch.autograd.grad(actual.sum(), x)[0],
+                               torch.autograd.grad(expected.sum(), x)[0])
+    assert all(not module._forward_pre_hooks for module in loaded.prior.modules())
+    assert all(not key.endswith(('weight_orig', 'weight_u', 'weight_v'))
+               for key in loaded.prior.state_dict())
+
+
 def test_zero_diffusion_matches_ode_and_readout():
     net=PointwisePFM(8)
     x,z=torch.randn(2,16,3),torch.randn(2,8)

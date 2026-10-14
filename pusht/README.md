@@ -84,7 +84,8 @@ pfm-pusht-train task.dataset.zarr_path=/absolute/path/pusht_cchi_v7_replay.zarr 
 Keep the intended model, data and training configuration when resuming. Checkpoints
 store model/EMA weights, optimizer, scheduler, epoch/update counters and RNG state.
 Recovery starts after the saved completed epoch. `latest.ckpt` and `final.ckpt`
-are written under `checkpoints/`; scalar logs are in `logs.json.txt`. Load only
+are written under `checkpoints/`; scalar training and evaluation logs append to
+`logs.json.txt`, including when resuming in the same output directory. Load only
 trusted PyTorch files.
 
 ## Sample and evaluate

@@ -75,7 +75,9 @@ Sampling generates twice the reference conformer count, using 50 steps and endpo
 
 `generated.pt` is a list of native PyG `Data` objects: `smiles`, `rdmol`, `pos_ref`, `pos_gen`, and per-atom `endpoint_variance` for the first generated conformer. Read it with `torch.load(path, weights_only=False)`.
 
-Evaluation retains heavy-atom, symmetry-aware RMSD and writes `metrics.json` / `coverage.csv`: COV-R/COV-P are higher-is-better, MAT-R/MAT-P lower-is-better (angstroms). Coverage is summarized at 0.5 Å. The native evaluator excludes disconnected inputs and performs no force-field relaxation. Optional chirality correction reflects a whole conformer only when every specified tetrahedral center disagrees with the input stereo; it never uses reference RMSD to select a correction. Save corrected outputs separately when retaining raw samples.
+Evaluation retains heavy-atom, symmetry-aware RMSD and writes `metrics.json` / `coverage.csv`: COV-R/COV-P are higher-is-better, MAT-R/MAT-P lower-is-better (angstroms). Coverage is summarized at 0.5 Å. The native evaluator excludes disconnected inputs and performs no force-field relaxation.
+
+Generation retains the existing ET-Flow atom encoding: its chirality feature maps all tetrahedral tags to the same value, so this feature does not distinguish input stereoisomers for the network. Input stereochemistry is used by the optional `pfm-molecules-chirality` postprocessing command. It reflects a whole conformer only when every specified tetrahedral center disagrees with the input stereo; it leaves partial disagreements unchanged and never uses reference RMSD to select a correction. This is the existing generation-and-postprocessing pipeline, not a learned chirality-conditioning claim. Save corrected outputs separately when retaining raw samples.
 
 ## Posterior diagnostics
 
@@ -84,7 +86,7 @@ pfm-molecules-diagnostics --checkpoint runs/qm9/checkpoints/final.ckpt --config 
 pfm-molecules-visualize --input runs/qm9/sde.pt --output runs/qm9/conformer.png
 ```
 
-Diagnostics fit variance bins and a time-only covariance baseline on validation reference interpolations, then measure grouped residual moments and Gaussian NLL on test reference interpolations. Molecules receive equal weight. `design.json` contains the validation design; `summary.json` contains test results and molecule-bootstrap intervals. These checks do not establish full conditional calibration or final-sample risk. The visual example colors the first conformer by endpoint covariance trace. After stereo correction, those variance values remain raw-model readouts.
+Diagnostics fit variance bins and a time-only covariance baseline on validation reference interpolations, then measure grouped residual second moments and Gaussian NLL on test reference interpolations. Molecules receive equal weight. The atom-averaged first residual moment is identically zero under centering and is not reported as a diagnostic. `design.json` contains the validation design; `summary.json` contains test results and molecule-bootstrap intervals. These checks apply to the raw model before chirality postprocessing and do not establish full conditional calibration or final-sample risk. The visual example colors the first conformer by endpoint covariance trace. After stereo correction, those variance values remain raw-model readouts.
 
 ## Tests and attribution
 

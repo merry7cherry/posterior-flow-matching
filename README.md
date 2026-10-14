@@ -40,6 +40,14 @@ of the same PFM. Point clouds retain joint latent-prior learning, molecules reta
 centered equivariant geometry, and PushT retains its native observation/action loop.
 Task-specific structures implement the same learning and sampling formulation.
 
+Molecular generation preserves the native graph features. The inherited atom
+chirality feature is constant, so the network does not distinguish the supplied
+chirality labels through that input. A separate, optional postprocessing command
+uses the input stereochemistry to reflect a conformer when all specified centers
+are inverted. Posterior variance and diagnostics describe the raw model before
+this correction; the molecular checks compare residual second moments and NLL.
+See the [molecular workflow](molecules/README.md#sample-and-evaluate).
+
 ## CPU examples and verification
 
 Each task README contains a small CPU workflow and links its verification record.

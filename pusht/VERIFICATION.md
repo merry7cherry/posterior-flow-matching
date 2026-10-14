@@ -43,6 +43,18 @@ the official-data checks. The new payload stores explicit config, model/EMA,
 optimizer and resume state; no original output directory or source identity is
 required to load it.
 
+After simplifying logging to append-only scalar JSONL, all 13 CPU tests passed
+again. An additional official-data check used two updates per epoch, interrupted
+after the first completed-epoch checkpoint, and resumed in the same output
+directory. Existing log records remained intact and subsequent records appended;
+the final model and EMA weights exactly matched uninterrupted training. Logging
+no longer repairs partial records, reads prior values, or reports elapsed time
+and peak CUDA memory.
+
+The cleanup wheel and source distribution were rebuilt on 2026-10-14 UTC. All
+48 tracked runtime/configuration files matched the wheel, and all three installed
+CLI help commands ran outside the checkout.
+
 ## Re-run
 
 ```bash

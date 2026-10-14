@@ -71,7 +71,7 @@ def summarize(records, design, config):
     for ti, t in enumerate(config['times']):
         stats = {k: interval([x[k][ti].mean() for x in records])
                  for k in ['trace_x', 'error_x', 'ratio', 'nll', 'bound_fraction']}
-        baseline_u, baseline_ratio, baseline_nll, means = [], [], [], []
+        baseline_u, baseline_ratio, baseline_nll = [], [], []
         sums = np.zeros((len(records), config['bins'], 4))
         for mi, x in enumerate(records):
             n = int(x['num_atoms'])
@@ -87,11 +87,9 @@ def summarize(records, design, config):
             baseline_u.append((1-t)**2 * base_v)
             baseline_ratio.append(x['error_v'][ti].mean()/base_v)
             baseline_nll.append(.5 * (x['error_v'][ti].mean() / (3*g*(1-1/n)) + np.log(g)))
-            means.append(x['residual_v'][ti].mean(axis=(0, 1)))
         stats['baseline_trace_x'] = interval(baseline_u)
         stats['baseline_ratio'] = interval(baseline_ratio)
         stats['baseline_nll'] = interval(baseline_nll)
-        stats['residual_mean'] = [interval(np.asarray(means)[:, k]) for k in range(3)]
         bins = []
         for bi in range(config['bins']):
             a = sums[:, bi]
@@ -111,7 +109,7 @@ def summarize(records, design, config):
         result.append(dict(t=t, **stats, bins=bins))
     return dict(molecules=len(records), timepoints=result,
                 interval_unit='molecule; fixed checkpoint, excludes training-seed uncertainty',
-                interpretation='Grouped first/second-moment diagnostics, not final-sample risk or full conditional calibration')
+                interpretation='Grouped residual second moments and Gaussian NLL, not final-sample risk or full conditional calibration')
 
 
 def collect(dataset, indices, model, config, device):
@@ -144,8 +142,6 @@ def collect(dataset, indices, model, config, device):
                 a['nll'] = prob.projected_nll(residual, lv, batch.batch).cpu().numpy()
                 lo, hi = model.logvar_min, model.logvar_max
                 a['bound_fraction'] = (((lv-lo)<.01*(hi-lo)) | ((hi-lv)<.01*(hi-lo))).float().cpu().numpy().reshape(pairs,n)
-                a['residual_v'] = residual.cpu().numpy().reshape(pairs,n,3)
-                a['marginal_v'] = marginal.cpu().numpy().reshape(pairs,n)
             for k, value in a.items():
                 if not np.isfinite(value).all():
                     raise ValueError(f'Nonfinite {k} at molecule {index}, t={t}')

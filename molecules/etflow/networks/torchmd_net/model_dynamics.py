@@ -470,7 +470,7 @@ class TorchMD_ET_dynamics(nn.Module):
 
 class TorchMDDynamics(nn.Module):
     """
-    TorchMDDynamics Model for DDPM training.
+    Equivariant velocity and variance backbone for molecular PFM.
 
     Parameters
     ----------
@@ -582,7 +582,7 @@ class TorchMDDynamics(nn.Module):
         batch: Tensor,
         edge_attr: Optional[Tensor] = None,
         node_attr: Optional[Tensor] = None,
-    ) -> Tuple[Tensor, Optional[Tensor]]:
+    ) -> Tuple[Tensor, Tensor]:
         """Forward pass over torchmd-net model.
 
         Parameters
@@ -618,7 +618,4 @@ class TorchMDDynamics(nn.Module):
         # latent representation
         _, v = self.output_model.pre_reduce(x, v, z, pos, batch)
         velocity = center(v - pos, batch)
-        if hasattr(self, "variance_head"):
-            variance_x = x
-            return velocity, self.variance_head(variance_x).squeeze(-1)
-        return velocity
+        return velocity, self.variance_head(x).squeeze(-1)

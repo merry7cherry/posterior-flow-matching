@@ -25,5 +25,7 @@ Category data are ordered by original index then shuffled with Python seed 2020,
 matching the native loader. A subset uses the prefix of that order.
 
 Initialization imports only the category's PointNet encoder and flow-prior
-weights. The coordinate PFM is initialized separately. Sampling checkpoints carry
+weights. If an upstream prior stores spectral-normalized weights, initialization
+imports the effective linear weights once. Training then uses ordinary parameters.
+The coordinate PFM is initialized separately. Sampling checkpoints carry
 all three models and do not depend on `GEN_*.pt`. Resume reads the saved configuration and model directly from the checkpoint.

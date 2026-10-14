@@ -25,8 +25,8 @@ default to CPU with two threads. No CUDA extension is needed.
 Obtain `shapenet.hdf5` and the category's `GEN_chair.pt` or `GEN_airplane.pt`
 from the [original assets](https://drive.google.com/drive/folders/1Su0hCuGFo1AGrNb_VMNnlF7qeQwKjfhZ).
 [Data details](docs/data.md) describes the split and normalization. The upstream
-asset initializes the encoder and latent prior; its diffusion decoder is unused.
-Data and pretrained PFM weights are not bundled.
+asset initializes the encoder and latent prior as ordinary trainable parameters;
+its diffusion decoder is unused. Data and pretrained PFM weights are not bundled.
 
 ## Small CPU example
 

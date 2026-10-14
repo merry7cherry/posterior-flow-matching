@@ -44,7 +44,7 @@ def test_sample_and_native_metrics(experiment):
         assert b.pos_gen.shape == (4, len(b.rdmol.GetAtoms()), 3)
         assert b.endpoint_variance.shape == (len(b.rdmol.GetAtoms()),)
     report = evaluate_metrics(experiment.output, experiment.output.parent/'metrics')
-    native, _ = CovMatEvaluator(num_workers=1, use_force_field=False)(packed)
+    native, _ = CovMatEvaluator(num_workers=1)(packed)
     _, matching = print_covmat_results(native)
     for key, value in matching.items():
         assert report[key] == value
