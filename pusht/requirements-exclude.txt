@@ -1,0 +1,2 @@
+# EGL discovery is unused by native pygame PushT; required by other robomimic simulators.
+egl-probe

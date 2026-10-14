@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "posterior-flow-matching-pointcloud"
+version = "0.1.0"
+description = "Joint Posterior Flow Matching for ShapeNet Chair and Airplane"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE", "licenses/*", "THIRD_PARTY_NOTICES.md"]
+authors = [{name = "PFM authors"}]
+dependencies = ["torch>=2.8,<3", "numpy>=1.26,<3", "h5py>=3.11,<4", "PyYAML>=6,<7", "matplotlib>=3.8,<4"]
+
+[project.optional-dependencies]
+test = ["pytest>=8,<9"]
+
+[project.scripts]
+pfm-pointcloud-train = "pfm_pointcloud.train:main"
+pfm-pointcloud-evaluate = "pfm_pointcloud.evaluate:main"
+pfm-pointcloud-sample = "pfm_pointcloud.generate:main"
+pfm-pointcloud-diagnostics = "pfm_pointcloud.diagnostics:main"
+
+[project.urls]
+Homepage = "https://merry7cherry.github.io/posterior-flow-matching/"
+Repository = "https://github.com/merry7cherry/posterior-flow-matching/tree/main/pointcloud"
+
+[tool.setuptools.packages.find]
+include = ["pfm_pointcloud*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

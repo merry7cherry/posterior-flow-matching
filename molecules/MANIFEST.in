@@ -1,0 +1,4 @@
+include README.md ARCHITECTURE.md VALIDATION.md THIRD_PARTY_NOTICES.md CITATION.cff LICENSE
+recursive-include LICENSES *.txt
+recursive-include configs *.yaml *.json
+recursive-include tests *.py

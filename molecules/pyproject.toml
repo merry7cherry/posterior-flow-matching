@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "posterior-flow-matching-molecules"
+version = "0.2.0"
+description = "Posterior Flow Matching for GEOM-QM9 molecular conformers"
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+license = "MIT"
+license-files = ["LICENSE", "LICENSES/*.txt"]
+authors = [{name = "Posterior Flow Matching authors"}]
+dependencies = [
+  "numpy==1.26.4", "torch==2.5.1", "torch-geometric==2.6.1",
+  "torch-cluster==1.6.3", "lightning==2.5.0.post0", "rdkit==2024.9.6",
+  "datamol==0.13.0", "loguru>=0.7,<0.8", "PyYAML>=6,<7",
+  "pandas>=2.2,<3", "scipy>=1.11,<2", "tqdm>=4.66,<5"
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8,<10", "build>=1.2"]
+visualize = ["matplotlib>=3.8,<4"]
+
+[project.scripts]
+pfm-molecules-train = "etflow.cli.train:main"
+pfm-molecules-sample = "etflow.cli.sample:main"
+pfm-molecules-evaluate = "etflow.cli.evaluate:main"
+pfm-molecules-prepare = "etflow.cli.prepare:main"
+pfm-molecules-chirality = "etflow.cli.chirality:main"
+pfm-molecules-diagnostics = "etflow.cli.diagnostics:main"
+pfm-molecules-visualize = "etflow.cli.visualize:main"
+pfm-molecules-example = "etflow.cli.example:main"
+
+[tool.setuptools.packages.find]
+include = ["etflow", "etflow.*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

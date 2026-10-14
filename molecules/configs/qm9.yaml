@@ -1,0 +1,55 @@
+seed: 42
+model: PosteriorFlow
+model_args:
+  network_type: TorchMDDynamics
+  hidden_channels: 160
+  num_layers: 20
+  num_rbf: 64
+  rbf_type: expnorm
+  trainable_rbf: true
+  activation: silu
+  neighbor_embedding: true
+  cutoff_lower: 0.0
+  cutoff_upper: 10.0
+  max_z: 100
+  node_attr_dim: 10
+  edge_attr_dim: 1
+  attn_activation: silu
+  num_heads: 8
+  distance_influence: both
+  reduce_op: sum
+  qk_norm: true
+  clip_during_norm: true
+  so3_equivariant: true
+  output_layer_norm: true
+  sigma: 0.0
+  prior_type: gaussian
+  optimizer_type: AdamW
+  lr: 0.0007
+  weight_decay: 1.0e-08
+  min_lr: 1.0e-08
+  source_scale: 1.0
+  logvar_min: -4.0
+  logvar_max: 4.0
+  logvar_init: 0.0
+  warmup_fraction: 0.01
+data:
+  batch_size: 4
+  num_workers: 0
+trainer:
+  max_epochs: 200
+  devices: 1
+  accelerator: cpu
+  strategy: auto
+  precision: 32-true
+  accumulate_grad_batches: 1
+  gradient_clip_val: 1.0
+  gradient_clip_algorithm: norm
+  log_every_n_steps: 10
+  num_sanity_val_steps: 0
+sampling:
+  n_timesteps: 50
+  terminal_time: 0.99
+  diffusion_scale: 0.3
+  probes: 2
+  batch_size: 32

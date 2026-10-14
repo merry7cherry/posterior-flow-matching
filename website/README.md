@@ -39,8 +39,7 @@ The project-page destination is
 https://merry7cherry.github.io/posterior-flow-matching/ . Paper buttons use
 `assets/paper.pdf` so they work under the repository's Pages path. Keep the
 preprint PDF link until an actual arXiv identifier is available, then update
-paper links and citation metadata together. Code links point to the public
-task repositories listed below.
+paper links and citation metadata together. Code links point to the four task directories in the shared repository.
 
 The `Publish project page` workflow uploads only this directory to GitHub Pages.
 The repository's Pages publishing source must be set to **GitHub Actions**. It
@@ -70,18 +69,12 @@ available. Do not infer conference acceptance from the manuscript template.
 
 ## Task code navigation
 
-The October 13, 2026 update connects four independent code repositories through
-the Code section and a code link inside each task panel. Images use this
-repository; point clouds, molecules, and PushT use the corresponding
-`posterior-flow-matching-pointcloud`, `posterior-flow-matching-molecules`, and
-`posterior-flow-matching-pusht` repositories under `merry7cherry`.
-The root README is the shared code index. Each task owns its own dependencies,
-usage instructions, licenses, and validation record. The three added releases
-are CPU-validated; CUDA, DDP, and full paper-result reproduction are not
-established by that verification. Figure assets and scientific result tables
-are unchanged by this navigation update.
+The shared repository contains four parallel task directories: `images/`,
+`pointcloud/`, `molecules/`, and `pusht/`. The root README is the common code index;
+each task owns its environment, native implementation and usage instructions.
+The page's main Code button opens the total project, and each application panel
+links directly to its task directory. Only `website/` is uploaded by Pages.
 
-Local navigation checks covered all four task tabs and the Code section at
-desktop and 390px mobile widths. Every local asset and anchor resolved, with
-no page-wide horizontal overflow or captured console errors. All scientific
-table and figure markup matched the preceding release exactly.
+The October 13, 2026 consolidation retains the existing paper PDF, figures and
+scientific result tables. CPU workflow evidence lives with the corresponding
+implementation; the page's numerical results remain the paper's experiments.

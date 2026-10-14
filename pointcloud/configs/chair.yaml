@@ -1,0 +1,38 @@
+kl_weight: 0.001
+seed: 42
+category: chair
+num_points: 2048
+scale_mode: shape_unit
+batch_size: 128
+max_iters: 800000
+lr: 0.002
+end_lr: 0.0001
+sched_start: 200000
+sched_end: 400000
+weight_decay: 0.0
+max_grad_norm: 10.0
+logvar_min: -3.0
+logvar_max: 3.0
+eps_t: 0.001
+precision: fp32
+allow_tf32: false
+log_every: 100
+checkpoint_every: 10000
+validate_every: 10000
+evaluation:
+  seed: 9988
+  batch_size: 32
+  metric_batch_size: 16
+  steps: 100
+  terminal_time: 0.99
+  diffusion_scale: 1.0
+  ode_precision: fp32
+  sde_precision: fp32
+  normalize: shape_bbox
+  diagnostic_times:
+  - 0.1
+  - 0.3
+  - 0.5
+  - 0.7
+  - 0.9
+  - 0.99

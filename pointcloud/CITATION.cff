@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "Please cite Posterior Flow Matching; see the project page for the current paper record."
+title: "Posterior Flow Matching: Point Clouds"
+type: software
+version: 0.1.0
+url: "https://merry7cherry.github.io/posterior-flow-matching/"
+repository-code: "https://github.com/merry7cherry/posterior-flow-matching/tree/main/pointcloud"
+authors:
+  - family-names: Ma
+    given-names: Chenrui
+  - family-names: Xiao
+    given-names: Xi
+  - family-names: Zhao
+    given-names: Lin
+  - family-names: Jiang
+    given-names: Xinru
+  - family-names: Wang
+    given-names: Tianyang
+  - family-names: Shen
+    given-names: Yanning
+  - family-names: Fioretto
+    given-names: Nando
+license: MIT

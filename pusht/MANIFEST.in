@@ -1,0 +1,4 @@
+include README.md VERIFICATION.md THIRD_PARTY_NOTICES.md CITATION.cff requirements-exclude.txt
+recursive-include licenses *.txt
+recursive-include diffusion_policy/config *.yaml
+recursive-include tests *.py

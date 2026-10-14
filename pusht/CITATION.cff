@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "Please cite Posterior Flow Matching and Diffusion Policy when using this implementation."
+type: software
+title: "Posterior Flow Matching: PushT"
+version: 0.1.0
+license: "MIT AND Apache-2.0"
+url: "https://merry7cherry.github.io/posterior-flow-matching/"
+repository-code: "https://github.com/merry7cherry/posterior-flow-matching/tree/main/pusht"
+authors:
+  - family-names: Ma
+    given-names: Chenrui
+  - family-names: Xiao
+    given-names: Xi
+  - family-names: Zhao
+    given-names: Lin
+  - family-names: Jiang
+    given-names: Xinru
+  - family-names: Wang
+    given-names: Tianyang
+  - family-names: Shen
+    given-names: Yanning
+  - family-names: Fioretto
+    given-names: Nando

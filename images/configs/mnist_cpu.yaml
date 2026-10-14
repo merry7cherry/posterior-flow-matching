@@ -1,0 +1,21 @@
+dataset: mnist
+architecture: conditional_unet
+mean_parameterization: velocity
+image_size: 28
+image_channels: 1
+num_classes: 10
+unet_base_channels: 8
+unet_channel_mult: [1, 2]
+unet_num_res_blocks: 1
+unet_norm_groups: 4
+unet_dropout: 0.0
+time_embed_dim: 16
+time_proj_dim: 16
+class_embed_dim: 16
+class_proj_dim: 16
+mixed_precision: none
+batch_size: 4
+num_workers: 0
+epochs: 1
+limit_train_batches: 2
+checkpoint_every_epochs: 1

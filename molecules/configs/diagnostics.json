@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "times": [
+    0.05,
+    0.1,
+    0.2,
+    0.4,
+    0.6,
+    0.8,
+    0.9,
+    0.95,
+    0.99
+  ],
+  "seed": 20260916,
+  "max_conformers": 8,
+  "noise_repeats": 4,
+  "validation_molecules": 512,
+  "bins": 8,
+  "bootstrap_repeats": 1000,
+  "precision": "float32",
+  "weighting": "equal molecules; equal selected conformers/noise pairs and atoms within molecule",
+  "postprocessing": "none; centered reference coordinates and original atom identities",
+  "validation_policy": "seeded molecule subset; freeze bin edges and time-only projected variance before test"
+}

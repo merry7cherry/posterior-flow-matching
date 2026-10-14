@@ -1,0 +1,45 @@
+cff-version: 1.2.0
+message: "If you use Posterior Flow Matching, please cite the accompanying preprint."
+type: software
+title: Posterior Flow Matching - Molecules
+repository-code: "https://github.com/merry7cherry/posterior-flow-matching/tree/main/molecules"
+url: "https://merry7cherry.github.io/posterior-flow-matching/"
+authors:
+  - family-names: Ma
+    given-names: Chenrui
+  - family-names: Xiao
+    given-names: Xi
+  - family-names: Zhao
+    given-names: Lin
+  - family-names: Jiang
+    given-names: Xinru
+  - family-names: Wang
+    given-names: Tianyang
+  - family-names: Shen
+    given-names: Yanning
+  - family-names: Fioretto
+    given-names: Nando
+keywords:
+  - flow matching
+  - generative modeling
+  - posterior uncertainty
+preferred-citation:
+  type: unpublished
+  title: Posterior Flow Matching
+  authors:
+    - family-names: Ma
+      given-names: Chenrui
+    - family-names: Xiao
+      given-names: Xi
+    - family-names: Zhao
+      given-names: Lin
+    - family-names: Jiang
+      given-names: Xinru
+    - family-names: Wang
+      given-names: Tianyang
+    - family-names: Shen
+      given-names: Yanning
+    - family-names: Fioretto
+      given-names: Nando
+  year: 2026
+  notes: Preprint

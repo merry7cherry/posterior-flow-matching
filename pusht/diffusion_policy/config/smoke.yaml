@@ -1,0 +1,30 @@
+defaults:
+- pusht
+- _self_
+policy:
+  down_dims:
+  - 16
+  - 32
+  diffusion_step_embed_dim: 16
+  sampling:
+    steps: 2
+training:
+  num_epochs: 2
+  max_train_steps: 1
+  max_val_steps: 1
+  lr_warmup_steps: 0
+  checkpoint_every: 1
+  rollout_every: 1
+  sample_every: 1
+dataloader:
+  batch_size: 2
+val_dataloader:
+  batch_size: 2
+task:
+  env_runner:
+    n_train: 0
+    n_train_vis: 0
+    n_test: 1
+    n_test_vis: 1
+    max_steps: 8
+    n_envs: 1
