@@ -28,7 +28,7 @@ from the [original assets](https://drive.google.com/drive/folders/1Su0hCuGFo1AGr
 asset initializes the encoder and latent prior as ordinary trainable parameters;
 its diffusion decoder is unused. Data and pretrained PFM weights are not bundled.
 
-## Small CPU example
+## Quick start
 
 This uses four real shapes, 2,048 points and the native network, for four updates:
 
@@ -39,8 +39,6 @@ pfm-pointcloud-train --config configs/cpu_smoke.yaml \
 pfm-pointcloud-sample --checkpoint runs/smoke/final.pt \
   --output runs/smoke/samples --count 2 --steps 2
 ```
-
-These outputs demonstrate execution, not generation quality.
 
 ## Train and resume
 
@@ -55,9 +53,8 @@ pfm-pointcloud-train --resume /path/to/latest.pt \
 
 For Airplane select `configs/airplane.yaml` and its initialization asset.
 Checkpoints contain model, configuration, optimizer, scheduler, iteration and RNG
-state. Resume loads the file directly; it needs no original output directory or
-initialization asset. `--stop-after 2` gives a short interrupted CPU run without
-changing the configured schedule. PointNet BatchNorm needs at least two shapes
+state. `--stop-after 2` stops after two updates while retaining the configured
+schedule. PointNet BatchNorm needs at least two shapes
 per batch, including the last batch. Local losses are written to `train.jsonl`.
 
 ## ODE/SDE sampling
@@ -82,7 +79,7 @@ pfm-pointcloud-evaluate --checkpoint runs/chair/final.pt \
 Evaluation uses matched initial draws for ODE/SDE, shape bounding-box
 normalization, and native squared-Chamfer MMD, COV and 1-NNA. MMD averages each
 reference shape's nearest generated distance; 1-NNA is best near 50%. For a small
-CPU check use `--limit 2 --steps 2`. EMD and JSD are outside this implementation.
+run use `--limit 2 --steps 2`.
 
 ## Posterior diagnostics
 
@@ -93,7 +90,7 @@ pfm-pointcloud-diagnostics --checkpoint runs/chair/final.pt \
 
 This directly evaluates held-out reference interpolations, without first running
 generation metrics. It reports raw residual/variance moments and Gaussian NLL in
-velocity and endpoint coordinates. Use `--limit 2` for a small CPU check.
+velocity and endpoint coordinates. Use `--limit 2` to select two reference shapes.
 
 ## Code guide
 
@@ -102,7 +99,7 @@ velocity and endpoint coordinates. Use `--limit 2` for a small CPU check.
 - `train.py`: interpolation, joint loss, optimization and ordinary checkpoints.
 - `generate.py`, `evaluate.py`, `diagnostics.py`: direct task entrypoints.
 
-[Method details](docs/method.md) · [CPU verification](docs/validation.md)
+[Method details](docs/method.md)
 
 ## Citation and license
 

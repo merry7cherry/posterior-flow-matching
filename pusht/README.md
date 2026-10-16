@@ -25,7 +25,6 @@ pytest -q
 
 The pinned Gym/Pymunk versions preserve the native simulator. The exclusion removes
 robomimic's unused EGL discovery dependency. Each PFM task uses its own environment.
-The commands also work from a built wheel; no Git metadata is needed at runtime.
 
 ## Data
 
@@ -43,7 +42,7 @@ validation episodes. The upstream normalization is stored in the checkpoint.
 Data and trained weights are not bundled; dataset terms remain with its publisher.
 Use absolute data paths when running commands outside this directory.
 
-## CPU example
+## Quickstart
 
 The smoke configuration keeps the native visual encoder, action interface and
 simulator, with a narrower U-Net and two single-update epochs:
@@ -60,8 +59,6 @@ pfm-pusht-diagnose --checkpoint outputs/smoke/checkpoints/final.ckpt \
   --data /absolute/path/pusht_cchi_v7_replay.zarr --output outputs/smoke/posterior
 ```
 
-This checks execution on CPU, not task quality or paper metrics.
-
 ## Train and resume
 
 ```bash
@@ -71,9 +68,9 @@ pfm-pusht-train task.dataset.zarr_path=/absolute/path/pusht_cchi_v7_replay.zarr 
 
 `pusht.yaml` sets the full U-Net widths 512/1024/2048, batch64, AdamW LR1e-4,
 500 warmup updates, cosine decay, 3050 epochs and per-update EMA. CPU/FP32 is
-the default; full training is expensive.
+the default.
 
-Resume from an ordinary checkpoint, including in a different output directory:
+Resume training:
 
 ```bash
 pfm-pusht-train task.dataset.zarr_path=/absolute/path/pusht_cchi_v7_replay.zarr \
@@ -81,12 +78,10 @@ pfm-pusht-train task.dataset.zarr_path=/absolute/path/pusht_cchi_v7_replay.zarr 
   hydra.run.dir=outputs/resumed
 ```
 
-Keep the intended model, data and training configuration when resuming. Checkpoints
-store model/EMA weights, optimizer, scheduler, epoch/update counters and RNG state.
+Checkpoints store model/EMA weights, optimizer, scheduler, epoch/update counters and RNG state.
 Recovery starts after the saved completed epoch. `latest.ckpt` and `final.ckpt`
 are written under `checkpoints/`; scalar training and evaluation logs append to
-`logs.json.txt`, including when resuming in the same output directory. Load only
-trusted PyTorch files.
+`logs.json.txt`.
 
 ## Sample and evaluate
 
@@ -115,7 +110,6 @@ This command runs independently of the simulator. `diagnostics.json` reports
 coordinate velocity variance, squared velocity residual and Gaussian NLL without
 its additive constant on held-out reference interpolations at t=0.1,0.5,0.9,0.99.
 Endpoint variance is `(1-t)^2 Gamma_v` in normalized action coordinates.
-These readouts describe action uncertainty, not object-position confidence.
 
 ## Code and method
 
@@ -131,9 +125,7 @@ Four Rademacher VJP probes estimate the diagonal variance derivative; the SDE
 includes both divergence and covariance-weighted score corrections. Both samplers
 stop at t=0.99 and use the endpoint mean readout.
 
-[VERIFICATION.md](VERIFICATION.md) records CPU evidence. Full training convergence,
-GPU behavior, timing and paper quality metrics have not been established by these
-checks. Cite PFM via [CITATION.cff](CITATION.cff), and
+Cite PFM via [CITATION.cff](CITATION.cff), and
 [Diffusion Policy](https://diffusion-policy.cs.columbia.edu/) for its native
 architecture, data pipeline and simulator. See [third-party notices](THIRD_PARTY_NOTICES.md)
 and [LICENSE](LICENSE) for the retained MIT/Apache-2.0 terms.

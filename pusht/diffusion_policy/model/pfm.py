@@ -41,8 +41,7 @@ def variance_diagonal(gamma, state, *, probes, generator=None, exact=False):
 @torch.no_grad()
 def sample_delta(field, initial, *, steps, terminal_time, solver,
                  diffusion_scale, probes, noise_scale, low, high,
-                 brownian_generator=None, probe_generator=None, exact=False,
-                 trace=None):
+                 brownian_generator=None, probe_generator=None, exact=False):
     """Matched-grid Euler / corrected Ito Euler-Maruyama, endpoint readout."""
     if type(steps) is not int or steps < 1 or not 0 < terminal_time < 1:
         raise ValueError('invalid sampling grid')
@@ -57,12 +56,6 @@ def sample_delta(field, initial, *, steps, terminal_time, solver,
     x = initial.detach().float().clone()
     h = terminal_time / steps
     nvjp = 0
-    def capture(state, time, velocity, raw, index):
-        if trace is not None:
-            trace.append({'t': float(time), 'call': index,
-                          'x': state.detach().float().cpu().clone(),
-                          'velocity': velocity.detach().float().cpu().clone(),
-                          'logvar': log_variance(raw.detach(), low, high).cpu().clone()})
     finite = torch.isfinite(x).all()
     for k in range(steps):
         t = torch.full((len(x),), k * h, device=x.device, dtype=torch.float32)
@@ -75,7 +68,6 @@ def sample_delta(field, initial, *, steps, terminal_time, solver,
                 div, calls = variance_diagonal(gamma, state, probes=probes,
                                                generator=probe_generator, exact=exact)
             nvjp += calls
-            capture(x, k * h, v, raw, k)
             v, gamma = v.detach().float(), gamma.detach()
             score = (t[:, None, None] * v - x) / (noise_scale**2 * (1-t[:, None, None]))
             drift = v + 0.5 * lam * (div + gamma * score)
@@ -84,14 +76,12 @@ def sample_delta(field, initial, *, steps, terminal_time, solver,
             finite &= torch.isfinite(div).all() & torch.isfinite(score).all()
         else:
             v, raw = field(x, t)
-            capture(x, k * h, v, raw, k)
             x = x + h * v.float()
         x = x.detach()
         finite &= torch.isfinite(x).all() & torch.isfinite(raw).all()
         del v, raw
     t = torch.full((len(x),), terminal_time, device=x.device, dtype=torch.float32)
     v, raw = field(x, t)
-    capture(x, terminal_time, v, raw, steps)
     gamma = log_variance(raw, low, high).exp()
     endpoint = x + (1-terminal_time) * v.float()
     if not bool(finite & torch.isfinite(endpoint).all() & torch.isfinite(gamma).all()):

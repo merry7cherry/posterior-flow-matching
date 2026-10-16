@@ -121,7 +121,6 @@ class PFMImagePolicy(BaseImagePolicy):
         prob = (logvar_init-logvar_min)/(logvar_max-logvar_min)
         nn.init.constant_(self.model.variance_head.bias, math.log(prob/(1-prob)))
         self.loss_stats, self.sample_stats = {}, {}
-        self.sample_trace = None
         self._sample_generators = None
 
     def _autocast(self):
@@ -195,5 +194,5 @@ class PFMImagePolicy(BaseImagePolicy):
                 probes=int(self.sampling['derivative_probes']), noise_scale=self.noise_scale,
                 low=self.logvar_min, high=self.logvar_max,
                 brownian_generator=brownian_gen, probe_generator=probe_gen,
-                exact=self.sampling.get('exact_derivatives', False), trace=self.sample_trace)
+                exact=self.sampling.get('exact_derivatives', False))
         return result

@@ -1,9 +1,8 @@
 # Data and category initialization
 
 Use the assets linked by the [official upstream repository](https://github.com/luost26/diffusion-point-cloud#datasets-and-pretrained-models).
-Download them to a directory of your choice; this repository never downloads data
-or checkpoints automatically and does not redistribute them. Review the original
-ShapeNet dataset terms and the asset provider's terms before obtaining them.
+Download them to a directory of your choice. ShapeNet and the initialization
+assets retain their providers' terms.
 
 | File | Provider link |
 |---|---|
@@ -27,5 +26,5 @@ matching the native loader. A subset uses the prefix of that order.
 Initialization imports only the category's PointNet encoder and flow-prior
 weights. If an upstream prior stores spectral-normalized weights, initialization
 imports the effective linear weights once. Training then uses ordinary parameters.
-The coordinate PFM is initialized separately. Sampling checkpoints carry
-all three models and do not depend on `GEN_*.pt`. Resume reads the saved configuration and model directly from the checkpoint.
+The coordinate PFM is initialized separately. Sampling and resume use the saved
+models and configuration in the training checkpoint.

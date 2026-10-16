@@ -27,7 +27,8 @@ there is no root-level Python installation or cross-task runtime dependency.
 | Actions | [pusht/](pusht/) | Image-conditioned PushT |
 
 Each task follows **data → PFM training → ODE/SDE sampling → task evaluation →
-posterior diagnostics**. Checkpoints and generated results are ordinary files that can be loaded directly.
+posterior diagnostics**. Task READMEs include small runnable examples and data
+preparation instructions. Datasets and pretrained PFM weights are not bundled.
 
 ```bash
 git clone https://github.com/merry7cherry/posterior-flow-matching.git
@@ -39,22 +40,6 @@ The image implementation supports velocity-mean and endpoint-mean parameterizati
 of the same PFM. Point clouds retain joint latent-prior learning, molecules retain
 centered equivariant geometry, and PushT retains its native observation/action loop.
 Task-specific structures implement the same learning and sampling formulation.
-
-Molecular generation preserves the native graph features. The inherited atom
-chirality feature is constant, so the network does not distinguish the supplied
-chirality labels through that input. A separate, optional postprocessing command
-uses the input stereochemistry to reflect a conformer when all specified centers
-are inverted. Posterior variance and diagnostics describe the raw model before
-this correction; the molecular checks compare residual second moments and NLL.
-See the [molecular workflow](molecules/README.md#sample-and-evaluate).
-
-## CPU examples and verification
-
-Each task README contains a small CPU workflow and links its verification record.
-These exercise model/loss, sampling and task interfaces; their outputs are not
-paper-quality results. Full training is expensive. No pretrained PFM weights or
-datasets are bundled, and CPU checks do not establish GPU execution or the paper's
-reported metrics. The project page reports the paper's experiments.
 
 ## Project page and paper
 

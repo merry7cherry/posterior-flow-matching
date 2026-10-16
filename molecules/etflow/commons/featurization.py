@@ -9,7 +9,7 @@ from rdkit import Chem
 from torch_geometric.data import Data
 
 from .covmat import build_conformer
-from .utils import atom_to_feature_vector, compute_edge_index, get_chiral_tensors
+from .utils import atom_to_feature_vector, compute_edge_index
 
 
 def get_mol_from_smiles(smiles):
@@ -82,25 +82,6 @@ class MoleculeFeaturizer:
         return atom_features
 
     @cache_decorator
-    def get_chiral_centers(self, smiles: str) -> torch.Tensor:
-        # compute chiral centers
-        mol = self.get_mol(smiles)
-        chiral_index, chiral_nbr_index, chiral_tag = self.get_chiral_centers_from_mol(
-            mol
-        )
-
-        self.cache[smiles]["chiral_centers"] = (
-            chiral_index,
-            chiral_nbr_index,
-            chiral_tag,
-        )
-        return chiral_index, chiral_nbr_index, chiral_tag
-
-    def get_chiral_centers_from_mol(self, mol: Mol) -> torch.Tensor:
-        chiral_index, chiral_nbr_index, chiral_tag = get_chiral_tensors(mol)
-        return chiral_index, chiral_nbr_index, chiral_tag
-
-    @cache_decorator
     def get_mol_with_conformer(self, smiles: str, positions: torch.Tensor) -> Mol:
         mol = self.get_mol(smiles)
         mol.AddConformer(build_conformer(positions))
@@ -138,9 +119,6 @@ class MoleculeFeaturizer:
             isomeric=True,
         )
         node_attr = self.get_atom_features_from_mol(mol, True)
-        chiral_index, chiral_nbr_index, chiral_tag = self.get_chiral_centers_from_mol(
-            mol
-        )
         edge_index, edge_attr = self.get_edge_index_from_mol(mol, False)
         atomic_numbers = self.get_atomic_numbers_from_mol(mol)
 
@@ -148,9 +126,6 @@ class MoleculeFeaturizer:
             atomic_numbers=atomic_numbers,
             smiles=smiles_changed,
             edge_index=edge_index,
-            chiral_index=chiral_index,
-            chiral_nbr_index=chiral_nbr_index,
-            chiral_tag=chiral_tag,
             node_attr=node_attr,
             edge_attr=edge_attr,
         )

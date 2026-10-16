@@ -24,7 +24,7 @@ the LTH14 `torch-fidelity` implementation used by the image protocol.
 For CUDA, install the appropriate PyTorch 2.11.0 / torchvision 0.26.0 wheels
 before installing this package.
 
-## CPU example
+## Quick start
 
 ```bash
 bash examples/mnist_cpu.sh ./outputs/mnist
@@ -33,8 +33,6 @@ bash examples/mnist_cpu.sh ./outputs/mnist
 This downloads MNIST, trains two batches, resumes for two more, generates ODE
 and SDE samples, and computes posterior diagnostics on eight held-out images.
 Pass an existing MNIST directory as the second argument to reuse local data.
-These short runs check execution, not image quality. The supplied CPU model is
-smaller than the training models.
 
 ## Data and training
 
@@ -77,9 +75,7 @@ pfm-images-train --resume ./outputs/cifar10/latest.pt --data-root ./data/cifar10
   --output ./outputs/cifar10 --device cuda --set epochs=1000
 ```
 
-Continuation normally keeps the saved model/data settings and process count.
-The public checkpoint format is the one written here; earlier experimental
-checkpoint formats are not supported.
+Continuation keeps the saved model/data settings and process count.
 
 ## ODE and SDE sampling
 
@@ -99,11 +95,10 @@ endpoint mean at `T=0.99`.
 The SDE uses `lambda(t) = diffusion_scale * (1-t)` in both its corrected drift
 and noise. CIFAR-10's preset uses the paper's coefficient 0.5 and 50 steps.
 For ImageNet use `--set steps=250`; its SDE starting setting additionally uses
-`--set diffusion_scale=0.1`. The coefficient remains configurable; supplied
-settings and an untrained model do not reproduce reported image metrics.
+`--set diffusion_scale=0.1`. The coefficient remains configurable.
 Velocity variance is bounded by the model configuration; endpoint variance is
-`(1-t)^2` times velocity variance. Variance at an earlier state is not final
-sample continuation variance.
+`(1-t)^2` times velocity variance and describes the endpoint posterior at the
+readout state.
 
 ## Evaluation
 
@@ -123,8 +118,7 @@ labels, yielding balanced populations when the count is divisible by the number
 of classes. Generated images use the native clamp/round-to-uint8 preprocessing;
 ImageNet reference images use the native ADM/JiT center crop. The Inception
 weights are downloaded by the metric backend on first use, or supplied through
-`--inception-weights /path/to/weights.pth` to preparation and evaluation. A small
-`--count` in FID preparation is only a software check, not the full reference.
+`--inception-weights /path/to/weights.pth` to preparation and evaluation.
 
 Held-out posterior checks need no Inception model:
 
@@ -136,16 +130,16 @@ pfm-images-evaluate posterior --checkpoint ./outputs/cifar10/latest.pt \
 These evaluate independent noise/data pairs at fixed reference times and report
 raw residual means, squared residuals versus predicted variance, variance bins,
 and Gaussian NLL in velocity/endpoint coordinates. Use `--times`, `--bins`, and
-`--count` for a bounded check. MNIST supports this diagnostic path; its purpose
-here is a small executable example rather than FID/IS evaluation.
+`--count` to select the diagnostic population. MNIST supports posterior diagnostics.
 
-## Code and verification
+## Code guide
 
 The main path is `train.py` → `probability.py` → `sampling/samplers.py` →
 `evaluate.py`. Native architectures live in `models/`; `diagnostics.py` and
 `metrics.py` contain the task measurements. There is one sampler shared by
-sample grids and generation metrics. See [architecture](docs/architecture.md)
-and [CPU verification](docs/verification.md).
+sample grids and generation metrics. See [architecture](docs/architecture.md).
+
+Run the tests with:
 
 ```bash
 OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 python -m pytest -q

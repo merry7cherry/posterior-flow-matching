@@ -89,7 +89,6 @@ class EuclideanDataset(Dataset):
 
         # Featurize molecule
         node_attr = self.mol_feat.get_atom_features(smiles)
-        chiral_index, chiral_nbr_index, chiral_tag = self.mol_feat.get_chiral_centers(smiles)
         edge_index, edge_attr = self.mol_feat.get_edge_index(smiles, False)
         mol = self.mol_feat.get_mol_with_conformer(smiles, pos)
 
@@ -99,9 +98,6 @@ class EuclideanDataset(Dataset):
             atomic_numbers=atomic_numbers,
             smiles=smiles,
             edge_index=edge_index,
-            chiral_index=chiral_index,
-            chiral_nbr_index=chiral_nbr_index,
-            chiral_tag=chiral_tag,
             mol=mol,
             node_attr=node_attr,
             edge_attr=edge_attr,

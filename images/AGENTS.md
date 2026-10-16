@@ -11,6 +11,5 @@ save/resume and EMA direct and readable. Do not reintroduce experiment binding,
 source identities, immutable artifacts, aggregation, variant registries, locks,
 standardized-residual coverage, cluster submission scripts or performance campaigns.
 
-Test mathematical changes and the affected execution path proportionately.
-CPU checks describe CPU behavior; they do not establish GPU performance or
-paper-quality reproduction. Keep temporary run outputs outside the repository.
+Test mathematical changes and the affected execution path proportionately on CPU.
+Keep temporary run outputs outside the repository.
