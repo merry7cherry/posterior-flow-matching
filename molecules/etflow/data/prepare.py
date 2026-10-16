@@ -58,15 +58,11 @@ def process_test_mol(mols: list[dm.Mol], partition: str):
         atomic_numbers = torch.tensor(
             [atom.GetAtomicNum() for atom in mol.GetAtoms()], dtype=torch.long
         )
-        atomic_charges = torch.tensor(
-            [atom.GetFormalCharge() for atom in mol.GetAtoms()], dtype=torch.long
-        )
 
         # get conformer positions from mol.GetConformer().GetPositions()
         pos = torch.tensor([mol.GetConformer().GetPositions() for mol in mols]).float()
         data = Data(
             atomic_numbers=atomic_numbers,
-            charges=atomic_charges,
             pos=pos,
             smiles=smiles,
             subset=partition,
@@ -103,34 +99,22 @@ def process_mol(
         atomic_numbers = torch.tensor(
             [atom.GetAtomicNum() for atom in mol.GetAtoms()], dtype=torch.long
         )
-        atomic_charges = torch.tensor(
-            [atom.GetFormalCharge() for atom in mol.GetAtoms()], dtype=torch.long
-        )
 
         # Sort conformers by Boltzmann weight if train/val split
         if split in ["train", "val"]:
             confs = sorted(confs, key=lambda x: x["boltzmannweight"], reverse=True)
-            confs = confs[:keep_top_n]  # Keep top 30 conformers
+            confs = confs[:keep_top_n]
 
-        # Collect conformer positions and energies
+        # Collect conformer positions
         positions = []
-        energies = []
-        boltzmann_weights = []  # Also store the weights
 
         for conf in confs:
             mol = conf["rd_mol"]
             pos = torch.from_numpy(mol.GetConformer().GetPositions()).float()
-            energy = torch.tensor([conf["totalenergy"]]).float()
-            weight = torch.tensor([conf["boltzmannweight"]]).float()
-
             positions.append(pos)
-            energies.append(energy)
-            boltzmann_weights.append(weight)
 
         # Stack conformer data
         positions = torch.stack(positions)  # [num_conformers, num_atoms, 3]
-        energies = torch.stack(energies)  # [num_conformers, 1]
-        boltzmann_weights = torch.stack(boltzmann_weights)  # [num_conformers, 1]
 
         # Check for disconnected components
         components = check_disconnected_components(mol)
@@ -141,9 +125,7 @@ def process_mol(
         # Create single PyG Data object with all conformers
         data = Data(
             atomic_numbers=atomic_numbers,  # [num_atoms]
-            charges=atomic_charges,  # [num_atoms]
             pos=positions,  # [num_conformers, num_atoms, 3]
-            energy=energies,  # [num_conformers, 1]
             smiles=smiles,
             subset=partition,
         )

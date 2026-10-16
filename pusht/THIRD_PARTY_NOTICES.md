@@ -1,6 +1,6 @@
 # Third-party source notices
 
-This code is a focused derivative of [Diffusion Policy](https://github.com/real-stanford/diffusion_policy), upstream commit `5ba07ac6661db573af695b419a7947ecb704690f`. The original Columbia Artificial Intelligence and Robotics Lab MIT notice is retained in `LICENSE`. PFM additions and this release use that license. Source was prepared from the authors' internal derivative revision `525db84ca8dfbdd67e7fe5649d7f38acdc23d3f7`; its research history, datasets and trained checkpoints are not distributed here.
+This code is a focused derivative of [Diffusion Policy](https://github.com/real-stanford/diffusion_policy), upstream commit `5ba07ac6661db573af695b419a7947ecb704690f`. The original Columbia Artificial Intelligence and Robotics Lab MIT notice is retained in `LICENSE`. PFM additions use that license.
 
 Inherited descendants retain the following upstream licenses:
 

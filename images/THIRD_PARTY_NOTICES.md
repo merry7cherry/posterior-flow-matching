@@ -4,8 +4,7 @@ The licenses below apply to their respective upstream components. They do not
 grant a license for datasets, pretrained weights, or paper assets. Original
 PFM code in this image task is licensed under the MIT License
 in [LICENSE](LICENSE). The EDM-derived file, including its local adaptations,
-is instead distributed under CC BY-NC-SA 4.0. Upstream notices were checked on
-2026-10-04 and retained in the October 13, 2026 monorepo image task.
+is instead distributed under CC BY-NC-SA 4.0.
 
 ## JiT transformer
 
